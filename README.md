@@ -1,5 +1,7 @@
 # HW2: Temperature Forecast Web App 🌤️
 
+**Live Demo URL:** [https://kungtan-aiot-hm2-temp-forecast.streamlit.app/](https://kungtan-aiot-hm2-temp-forecast.streamlit.app/)
+
 這是一個基於中央氣象署 (CWA) 開放資料 API 所開發的氣溫預報視覺化 Web 應用程式。本專案將一週的農漁業氣象預報資料抓取下來後，寫入 SQLite 資料庫中，最後使用 Streamlit 建立一個能與使用者互動的數據儀表板，包含動態地圖與氣溫趨勢圖。
 
 ---

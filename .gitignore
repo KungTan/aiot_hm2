@@ -1,0 +1,6 @@
+venv/
+__pycache__/
+*.pyc
+.vscode/
+data.db
+weather_data.csv

@@ -1,4 +1,4 @@
-# HW2: 氣溫預報 Web App 開發日誌 (Q&A 形式)
+# HW2: 氣溫預報 Web App 開發日誌
 
 本文件紀錄了開發「氣溫預報 Web App (使用 CWA API)」過程中，使用者 (User) 與 AI 修改與討論的重點紀錄。
 

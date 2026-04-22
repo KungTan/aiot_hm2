@@ -22,6 +22,26 @@
 
 ---
 
+## 📸 系統截圖與功能展示 (Screenshots & Showcase)
+
+### 1. 互動式地圖與圖例 (Interactive Map & Legend)
+![Interactive Map](images/map_view.png)
+> 左側顯示基於 `folium` 繪製的台灣動態地圖，圓圈顏色會根據氣溫動態變化（藍、綠、黃、紅），並且上方附有清楚的地圖圖例 (Map Legend) 供使用者參考。右側則顯示各區的詳細氣溫總表。
+
+### 2. 動態數據儀表板與穿搭建議 (Dynamic Metrics & Advice)
+![Metric Cards & Advice](images/metrics_advice.png)
+> 透過全新的地區下拉選單，使用者可以查看全台灣或特定地區的「最高溫」、「最低溫」及「平均溫」玻璃擬物化卡片 (Glassmorphism)。系統會依據平均氣溫，自動計算並給出相對應的出門穿搭指南。
+
+### 3. 區域氣溫趨勢圖 (Regional Temperature Trends)
+![Trend Chart](images/trend_chart.png)
+> 進入 Region Trends View 標籤頁後，可透過 Plotly 繪製的一週氣溫折線圖，一目了然地觀察所選地區的溫度變化趨勢。圖表已針對深色模式進行背景透明化與視覺優化。
+
+### 4. 詳細氣溫預報數據表 (Detailed Forecast Table)
+![Data Table](images/data_table.png)
+> 在趨勢圖下方，附有詳細的預測數據表格。除了保留原始的最高與最低溫外，還新增了 `AvgT` (平均氣溫) 欄位，提供更精確的氣候參考指標。
+
+---
+
 ## 📂 專案檔案結構 (Project Structure)
 
 ```

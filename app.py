@@ -60,7 +60,7 @@ with st.sidebar:
     st.header("Data Controls")
     st.write("Source API or Local JSON.")
     data_source = st.radio("fetch mode:", ["Local JSON (Offline)", "CWA API (Live)"])
-    if st.button("Refresh Data Data"):
+    if st.button("Refresh Data"):
         with st.spinner("Refreshing..."):
             if "Offline" in data_source:
                 data_manager.refresh_data("local")

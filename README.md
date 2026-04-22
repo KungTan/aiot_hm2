@@ -65,7 +65,10 @@ d:\aiot_hm2_g\
 streamlit run app.py
 ```
 執行後，如果沒有跳出瀏覽器，可以自行打開畫面中顯示的 `Local URL` (通常是 `http://localhost:8501`)。
-網頁左側有 **Data Controls** 選單，你可以隨時點選「Refresh Data」來重新向氣象署拉取最新資料寫入圖表。
+網頁左側有 **Data Controls** 選單，你可以切換「Local JSON (Offline)」或是「CWA API (Live)」模式。
+
+> [!IMPORTANT]
+> **資料更新機制**：當切換不同的資料模式 (Local JSON / CWA API) 後，請務必點擊下方的 **Refresh Data** 按鈕。系統才會真正去讀取對應的檔案或連結，並覆蓋原本的資料庫來更新畫面上的氣溫與日期！
 
 ### 方法 2: 獨立測試後端資料抓取
 如果你想針對後端抓資料以及寫入資料庫這段邏輯單獨做測試，可以執行：

@@ -149,7 +149,9 @@ with tab2:
     st.plotly_chart(fig, use_container_width=True)
     
     st.markdown(f"#### Temperature Data for {selected_region}")
-    styled_df = region_df[['dataDate', 'mint', 'maxt']].rename(columns={'mint': 'MinT', 'maxt': 'MaxT'})
+    styled_df = region_df[['dataDate', 'mint', 'maxt']].copy()
+    styled_df['AvgT'] = (styled_df['mint'] + styled_df['maxt']) / 2
+    styled_df = styled_df.rename(columns={'mint': 'MinT', 'maxt': 'MaxT'})
     styled_df = styled_df.reset_index(drop=True)
     st.dataframe(styled_df, use_container_width=True)
 

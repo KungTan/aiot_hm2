@@ -79,18 +79,31 @@ tab1, tab2 = st.tabs(["🗺️ Date Map View (Left/Right)", "📊 Region Trends 
 with tab1:
     st.subheader("Taiwan Weather Map Forecast")
     
-    # Date Selector
-    available_dates = df['dataDate'].unique().tolist()
-    selected_date = st.selectbox("Select Date", available_dates, key="map_date_select")
+    # Selectors for Date and Overview Region
+    sel_col1, sel_col2 = st.columns(2)
+    with sel_col1:
+        available_dates = df['dataDate'].unique().tolist()
+        selected_date = st.selectbox("Select Date", available_dates, key="map_date_select")
+        
+    with sel_col2:
+        available_overview_regions = ["全台灣 (National)"] + sorted(df['regionName'].unique().tolist())
+        overview_region = st.selectbox("Select Region for Overview & Advice", available_overview_regions, key="overview_region_select")
     
-    # Filter data for selected date
+    # Filter data for selected date (used for Map and Table)
     date_df = df[df['dataDate'] == selected_date].copy()
     date_df['avg_temp'] = (date_df['mint'] + date_df['maxt']) / 2
     
-    # Calculate Data Summaries
-    overall_avg = date_df['avg_temp'].mean()
-    high_max = date_df['maxt'].max()
-    low_min = date_df['mint'].min()
+    # Calculate Data Summaries for Metric Cards
+    if overview_region == "全台灣 (National)":
+        target_df = date_df
+        avg_title = "National Avg (°C)"
+    else:
+        target_df = date_df[date_df['regionName'] == overview_region]
+        avg_title = f"{overview_region} Avg (°C)"
+
+    overall_avg = target_df['avg_temp'].mean()
+    high_max = target_df['maxt'].max()
+    low_min = target_df['mint'].min()
     
     # Going-out Advice Logic
     if overall_avg < 20:
@@ -106,11 +119,11 @@ with tab1:
         advice_icon = "🕶️"
         advice_text = "天氣相當炎熱！出門請以短袖透氣衣物為主，多補充水分，務必做好防曬以防中暑。"
         
-    st.markdown("### Daily Overview & Advice")
+    st.markdown(f"### {overview_region} Overview & Advice")
     m1, m2, m3 = st.columns(3)
-    m1.metric("Top Max Temp (°C)", f"{high_max:.1f}°C")
-    m2.metric("Top Min Temp (°C)", f"{low_min:.1f}°C")
-    m3.metric("National Avg (°C)", f"{overall_avg:.1f}°C")
+    m1.metric("Highest Max Temp (°C)", f"{high_max:.1f}°C")
+    m2.metric("Lowest Min Temp (°C)", f"{low_min:.1f}°C")
+    m3.metric(avg_title, f"{overall_avg:.1f}°C")
     
     st.info(f"**{advice_icon} 出門穿搭指南**：{advice_text}")
     st.markdown("---")

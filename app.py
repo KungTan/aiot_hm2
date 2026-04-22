@@ -121,8 +121,9 @@ with tab1:
 
     with col_right:
         st.markdown("### Temperature Data")
-        display_df = date_df[['id', 'regionName', 'mint', 'maxt', 'avg_temp']].sort_values(by='avg_temp', ascending=False)
-        display_df.rename(columns={'id': 'ID', 'regionName': 'Region', 'mint': 'Min Temp (°C)', 'maxt': 'Max Temp (°C)', 'avg_temp': 'Avg Temp (°C)'}, inplace=True)
+        display_df = date_df[['regionName', 'mint', 'maxt', 'avg_temp']].sort_values(by='avg_temp', ascending=False)
+        display_df.rename(columns={'regionName': 'Region', 'mint': 'Min Temp (°C)', 'maxt': 'Max Temp (°C)', 'avg_temp': 'Avg Temp (°C)'}, inplace=True)
+        display_df = display_df.reset_index(drop=True)
         st.dataframe(display_df, use_container_width=True)
 
 with tab2:
@@ -148,7 +149,8 @@ with tab2:
     st.plotly_chart(fig, use_container_width=True)
     
     st.markdown(f"#### Temperature Data for {selected_region}")
-    styled_df = region_df[['id', 'dataDate', 'mint', 'maxt']].rename(columns={'id': 'ID', 'dataDate': 'Date', 'mint': 'MinT', 'maxt': 'MaxT'})
+    styled_df = region_df[['dataDate', 'mint', 'maxt']].rename(columns={'mint': 'MinT', 'maxt': 'MaxT'})
+    styled_df = styled_df.reset_index(drop=True)
     st.dataframe(styled_df, use_container_width=True)
 
 # Custom CSS for UI Enhancement

@@ -133,6 +133,16 @@ with tab1:
     
     with col_left:
         st.markdown("### Weather Map")
+        # Color Legend
+        st.markdown("""
+        <div style="display: flex; gap: 15px; margin-bottom: 15px; font-size: 0.9em; font-weight: 500; align-items: center;">
+            <span style="color: #666;">Map Legend: </span>
+            <div><span style="display: inline-block; width: 12px; height: 12px; background-color: #3186cc; border-radius: 50%; opacity: 0.8;"></span> &lt; 20°C</div>
+            <div><span style="display: inline-block; width: 12px; height: 12px; background-color: #28a745; border-radius: 50%; opacity: 0.8;"></span> 20~24°C</div>
+            <div><span style="display: inline-block; width: 12px; height: 12px; background-color: #ffc107; border-radius: 50%; opacity: 0.8;"></span> 25~29°C</div>
+            <div><span style="display: inline-block; width: 12px; height: 12px; background-color: #dc3545; border-radius: 50%; opacity: 0.8;"></span> &ge; 30°C</div>
+        </div>
+        """, unsafe_allow_html=True)
         # Base folium map
         # Center Taiwan coordinates
         m = folium.Map(location=[23.6978, 120.9605], zoom_start=7, tiles="OpenStreetMap")

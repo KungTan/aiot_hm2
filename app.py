@@ -53,7 +53,7 @@ except Exception as e:
     df = pd.DataFrame()
 
 # UI Building
-st.title("🌤️ Temperature Forecast Web App")
+st.markdown("<h1 class='gradient-title'>🌤️ Temperature Forecast Web App</h1>", unsafe_allow_html=True)
 
 # Layout: sidebar for controls or main content tabs
 with st.sidebar:
@@ -86,6 +86,34 @@ with tab1:
     # Filter data for selected date
     date_df = df[df['dataDate'] == selected_date].copy()
     date_df['avg_temp'] = (date_df['mint'] + date_df['maxt']) / 2
+    
+    # Calculate Data Summaries
+    overall_avg = date_df['avg_temp'].mean()
+    high_max = date_df['maxt'].max()
+    low_min = date_df['mint'].min()
+    
+    # Going-out Advice Logic
+    if overall_avg < 20:
+        advice_icon = "🧣"
+        advice_text = "天氣偏涼甚至寒冷，建議穿著長袖、毛衣或準備保暖大衣，注意防風。"
+    elif 20 <= overall_avg <= 24:
+        advice_icon = "🧥"
+        advice_text = "天氣舒適帶點涼意，建議洋蔥式穿搭，帶件薄外套或是長袖衣物出門是最佳選擇。"
+    elif 24 < overall_avg <= 28:
+        advice_icon = "👕"
+        advice_text = "氣溫溫暖舒適，穿著短袖或輕薄長袖即可，若太陽大可考慮簡便防曬。"
+    else:
+        advice_icon = "🕶️"
+        advice_text = "天氣相當炎熱！出門請以短袖透氣衣物為主，多補充水分，務必做好防曬以防中暑。"
+        
+    st.markdown("### Daily Overview & Advice")
+    m1, m2, m3 = st.columns(3)
+    m1.metric("Top Max Temp (°C)", f"{high_max:.1f}°C")
+    m2.metric("Top Min Temp (°C)", f"{low_min:.1f}°C")
+    m3.metric("National Avg (°C)", f"{overall_avg:.1f}°C")
+    
+    st.info(f"**{advice_icon} 出門穿搭指南**：{advice_text}")
+    st.markdown("---")
     
     # Create two columns for left/right layout
     col_left, col_right = st.columns([1.5, 1])
@@ -145,6 +173,14 @@ with tab2:
     fig = px.line(melted_df, x="dataDate", y="Temperature", color='Type', markers=True, 
                  labels={'dataDate': 'Date', 'Temperature': 'Temperature (°C)'},
                  color_discrete_map={"MinT": "#00B4D8", "MaxT": "#FF8FA3"})
+                 
+    fig.update_layout(
+        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="rgba(0,0,0,0)",
+        xaxis=dict(showgrid=False),
+        yaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.1)"),
+        hovermode="x unified"
+    )
     
     st.plotly_chart(fig, use_container_width=True)
     
@@ -158,14 +194,40 @@ with tab2:
 # Custom CSS for UI Enhancement
 st.markdown("""
 <style>
-/* Center headers */
-h1, h2, h3 {  
-    color: #4A4A4A;
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+
+html, body, [class*="css"]  {
+    font-family: 'Outfit', sans-serif;
 }
-/* Style dataframes */
+.gradient-title {
+    background: -webkit-linear-gradient(45deg, #FF8FA3, #00B4D8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    font-size: 3rem;
+    padding-bottom: 20px;
+}
+[data-testid="stMetric"] {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(4px);
+    border-radius: 10px;
+    padding: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+[data-testid="stMetric"]:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.3);
+}
 [data-testid="stDataFrame"] {
     border-radius: 8px;
     overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+[data-testid="stDataFrame"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 </style>
 """, unsafe_allow_html=True)

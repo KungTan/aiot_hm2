@@ -90,6 +90,18 @@ d:\aiot_hm2_g\
    pip install -r requirements.txt
    ```
 
+5. **設定環境變數 (API Token)**：
+   為了資安考量，本專案不將 API 授權碼寫死在程式碼中。請在本地端執行前完成以下設定：
+   - 在專案根目錄下建立一個名為 `.env` 的檔案。
+   - 參考 `.env.example` 的格式，填寫你申請的中央氣象署 API 授權碼：
+     
+     ```env
+     CWA_API_KEY=CWA-你的授權碼放這裡
+     ```
+
+   > [!WARNING]
+   > 若你要在 **GitHub Actions** 或 **Streamlit Community Cloud** 上執行此專案，請務必前往它們的後台設定區 (Secrets) 新增這把 `CWA_API_KEY` 鑰匙，否則程式會因為抓不到密碼而報錯！
+
 ---
 
 ## 📖 如何使用

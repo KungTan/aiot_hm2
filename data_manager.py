@@ -144,9 +144,9 @@ def setup_database(data):
     conn.close()
 
 def main():
-    # Attempt offline first as instructed (or online if preferred)
+    # Attempt online fetch by default for GitHub Actions scheduling
     try:
-        raw_data = get_data(use_local=True)
+        raw_data = get_data(use_local=False)
         # Using json.dumps to observe as requested
         # print("Observation of raw dataset: ")
         # print(json.dumps(raw_data, ensure_ascii=False)[:300] + "...\n") 

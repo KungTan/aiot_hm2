@@ -3,9 +3,13 @@ import sqlite3
 import requests
 import pandas as pd
 import os
+from dotenv import load_dotenv
+
+# 載入 .env 環境變數
+load_dotenv()
 
 API_URL = "https://opendata.cwa.gov.tw/fileapi/v1/opendataapi/F-A0010-001"
-API_KEY = "CWA-32A5B01C-AA7A-4609-A6F9-A16F30FB95EF"
+API_KEY = os.getenv("CWA_API_KEY")
 LOCAL_JSON = "F-A0010-001.json"
 DB_NAME = "data.db"
 CSV_NAME = "weather_data.csv"

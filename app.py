@@ -69,8 +69,10 @@ with st.sidebar:
     st.header("Data Controls")
     st.write("Source: CWA API (Live)")
     
-    # Display last updated time
-    st.markdown(f"**Last Updated (Taiwan Time):**<br><span style='color: #28a745; font-weight: 600;'>{get_last_update_time()}</span>", unsafe_allow_html=True)
+    # Placeholder for dynamic update
+    timestamp_placeholder = st.empty()
+    timestamp_placeholder.markdown(f"**Last Updated (Taiwan Time):**<br><span style='color: #28a745; font-weight: 600;'>{get_last_update_time()}</span>", unsafe_allow_html=True)
+    
     st.write("") # spacing
     
     if st.button("Refresh Data"):
@@ -78,6 +80,8 @@ with st.sidebar:
             data_manager.refresh_data()
             st.success("Successfully Refreshed!")
             df = load_data()
+            # Update the placeholder with the new timestamp immediately
+            timestamp_placeholder.markdown(f"**Last Updated (Taiwan Time):**<br><span style='color: #28a745; font-weight: 600;'>{get_last_update_time()}</span>", unsafe_allow_html=True)
 
 if df.empty:
     st.warning("No data available. Please click 'Refresh Data' to fetch from CWA.")

@@ -5,6 +5,7 @@ import folium
 from streamlit_folium import folium_static
 import plotly.express as px
 import os
+import datetime
 import data_manager
 
 # --- Config and Setup ---
@@ -40,6 +41,14 @@ def load_data():
     conn.close()
     return df
 
+def get_last_update_time():
+    if os.path.exists(DB_NAME):
+        mtime = os.path.getmtime(DB_NAME)
+        dt_utc = datetime.datetime.fromtimestamp(mtime, tz=datetime.timezone.utc)
+        tw_tz = datetime.timezone(datetime.timedelta(hours=8))
+        return dt_utc.astimezone(tw_tz).strftime("%Y-%m-%d %H:%M:%S")
+    return "Unknown"
+
 # Initialize Data & Session State
 if "data_fetched" not in st.session_state:
     if not os.path.exists(DB_NAME) or os.stat(DB_NAME).st_size == 0:
@@ -59,6 +68,11 @@ st.markdown("<h1 class='gradient-title'>🌤️ Temperature Forecast Web App</h1
 with st.sidebar:
     st.header("Data Controls")
     st.write("Source: CWA API (Live)")
+    
+    # Display last updated time
+    st.markdown(f"**Last Updated (Taiwan Time):**<br><span style='color: #28a745; font-weight: 600;'>{get_last_update_time()}</span>", unsafe_allow_html=True)
+    st.write("") # spacing
+    
     if st.button("Refresh Data"):
         with st.spinner("Fetching latest data from CWA..."):
             data_manager.refresh_data()

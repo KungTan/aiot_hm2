@@ -58,19 +58,15 @@ st.markdown("<h1 class='gradient-title'>🌤️ Temperature Forecast Web App</h1
 # Layout: sidebar for controls or main content tabs
 with st.sidebar:
     st.header("Data Controls")
-    st.write("Source API or Local JSON.")
-    data_source = st.radio("fetch mode:", ["Local JSON (Offline)", "CWA API (Live)"], index=1)
+    st.write("Source: CWA API (Live)")
     if st.button("Refresh Data"):
-        with st.spinner("Refreshing..."):
-            if "Offline" in data_source:
-                data_manager.refresh_data("local")
-            else:
-                data_manager.refresh_data("api")
+        with st.spinner("Fetching latest data from CWA..."):
+            data_manager.refresh_data()
             st.success("Successfully Refreshed!")
             df = load_data()
 
 if df.empty:
-    st.warning("No data available. Please refresh data source.")
+    st.warning("No data available. Please click 'Refresh Data' to fetch from CWA.")
     st.stop()
     
 # Create tabs for the two different views mentioned (HW2-4 vs Complete Prompt Step)

@@ -10,28 +10,22 @@ load_dotenv()
 
 API_URL = "https://opendata.cwa.gov.tw/fileapi/v1/opendataapi/F-A0010-001"
 API_KEY = os.getenv("CWA_API_KEY")
-LOCAL_JSON = "F-A0010-001.json"
 DB_NAME = "data.db"
 CSV_NAME = "weather_data.csv"
 
-def get_data(use_local=True):
-    """Fetch data from local file or CWA API."""
-    if use_local and os.path.exists(LOCAL_JSON):
-        print(f"Loading local JSON file: {LOCAL_JSON}")
-        with open(LOCAL_JSON, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    else:
-        print("Fetching from CWA API...")
-        # Handle SSL verification correctly by just accepting it or passing verify=False if encountering issues
-        try:
-            response = requests.get(f"{API_URL}?Authorization={API_KEY}&downloadType=WEB&format=JSON", verify=True)
-            response.raise_for_status()
-            return response.json()
-        except requests.exceptions.SSLError:
-            print("SSL Error encountered, falling back to verify=False")
-            response = requests.get(f"{API_URL}?Authorization={API_KEY}&downloadType=WEB&format=JSON", verify=False)
-            response.raise_for_status()
-            return response.json()
+def get_data():
+    """Fetch data from CWA API."""
+    print("Fetching from CWA API...")
+    # Handle SSL verification correctly by just accepting it or passing verify=False if encountering issues
+    try:
+        response = requests.get(f"{API_URL}?Authorization={API_KEY}&downloadType=WEB&format=JSON", verify=True)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.SSLError:
+        print("SSL Error encountered, falling back to verify=False")
+        response = requests.get(f"{API_URL}?Authorization={API_KEY}&downloadType=WEB&format=JSON", verify=False)
+        response.raise_for_status()
+        return response.json()
 
 def parse_data(raw_data):
     """Parse JSON data to extract temperatures."""
@@ -148,9 +142,9 @@ def setup_database(data):
     conn.close()
 
 def main():
-    # Attempt online fetch by default for GitHub Actions scheduling
+    # Attempt online fetch for GitHub Actions scheduling
     try:
-        raw_data = get_data(use_local=False)
+        raw_data = get_data()
         # Using json.dumps to observe as requested
         # print("Observation of raw dataset: ")
         # print(json.dumps(raw_data, ensure_ascii=False)[:300] + "...\n") 
@@ -172,10 +166,9 @@ def main():
         print(f"An error occurred: {str(e)}")
 
 # Add a function that streamlit can call directly to get fresh data
-def refresh_data(source="local"):
+def refresh_data():
     """Triggered by streamlit explicitly."""
-    use_local = (source == "local")
-    raw_data = get_data(use_local=use_local)
+    raw_data = get_data()
     parsed_data = parse_data(raw_data)
     save_to_csv(parsed_data)
     setup_database(parsed_data)

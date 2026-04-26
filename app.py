@@ -59,7 +59,7 @@ st.markdown("<h1 class='gradient-title'>🌤️ Temperature Forecast Web App</h1
 with st.sidebar:
     st.header("Data Controls")
     st.write("Source API or Local JSON.")
-    data_source = st.radio("fetch mode:", ["Local JSON (Offline)", "CWA API (Live)"])
+    data_source = st.radio("fetch mode:", ["Local JSON (Offline)", "CWA API (Live)"], index=1)
     if st.button("Refresh Data"):
         with st.spinner("Refreshing..."):
             if "Offline" in data_source:
@@ -189,13 +189,16 @@ with tab2:
     
     st.markdown(f"#### Temperature Trends for {selected_region}")
     
+    # Add avg temp to region_df
+    region_df['avg'] = (region_df['mint'] + region_df['maxt']) / 2
+    
     # Melt dataframe for standard plotly line chart
-    melted_df = region_df.melt(id_vars=['dataDate'], value_vars=['mint', 'maxt'], var_name='Type', value_name='Temperature')
-    melted_df['Type'] = melted_df['Type'].replace({'mint': 'MinT', 'maxt': 'MaxT'})
+    melted_df = region_df.melt(id_vars=['dataDate'], value_vars=['mint', 'avg', 'maxt'], var_name='Type', value_name='Temperature')
+    melted_df['Type'] = melted_df['Type'].replace({'mint': 'MinT', 'avg': 'AvgT', 'maxt': 'MaxT'})
     
     fig = px.line(melted_df, x="dataDate", y="Temperature", color='Type', markers=True, 
                  labels={'dataDate': 'Date', 'Temperature': 'Temperature (°C)'},
-                 color_discrete_map={"MinT": "#00B4D8", "MaxT": "#FF8FA3"})
+                 color_discrete_map={"MinT": "#00B4D8", "AvgT": "#28a745", "MaxT": "#FF8FA3"})
                  
     fig.update_layout(
         plot_bgcolor="rgba(0,0,0,0)",

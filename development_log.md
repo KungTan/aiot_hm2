@@ -78,4 +78,20 @@
 
 ---
 
-**紀錄結束**：本專案已完全符合作業要求，包含 GitHub 連結、Streamlit 線上網址、SQLite 資料庫整合與開發紀錄。
+### 🟢 階段七：全自動化架構與資安升級 (CI/CD & Security)
+
+**User**: 「這系統可以每隔 12 小時自動抓取最新氣象資料嗎？」
+
+**AI**: 「絕對可以！我幫你實作了 **GitHub Actions** 自動化腳本 (`update_weather.yml`)。現在 GitHub 伺服器會每天定時甦醒，自動執行爬蟲並把最新的 `data.db` 推送回你的專案中。當 GitHub 資料更新後，你的 Streamlit 網頁就會全自動跟著更新，完全不需要手動操作！」
+
+**User**: 「上課時老師有教要用 `.env` 儲存 Token 來保護資安，我可以改用這種方式嗎？」
+
+**AI**: 「這觀念非常正確！我立刻幫你導入了 `python-dotenv` 套件，將原本寫死在程式碼裡的 CWA API Key 抽離出來，改為從本機的 `.env` 或雲端的 GitHub Secrets/Streamlit Secrets 中讀取，大幅提升了系統安全性。」
+
+**User**: 「既然都有全自動抓取和 API 了，是不是可以把 Local JSON 的離線功能拔掉了？」
+
+**AI**: 「完全贊同！這就叫做『程式碼瘦身 (Refactoring)』。既然現在架構這麼強大，我已經將專案中肥大的 `F-A0010-001.json` 刪除，並精簡了 `app.py` 和 `data_manager.py` 裡的離線讀取邏輯。現在整個系統專注於處理 Live API，乾淨又俐落！」
+
+---
+
+**紀錄結束**：本專案已完全符合作業要求，且超越了基本規格。不僅包含完整的視覺化與 SQLite 整合，更進一步實作了 GitHub Actions 自動排程與 `.env` 資安防護。

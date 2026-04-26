@@ -8,9 +8,10 @@
 
 ## 🚀 專案功能特色
 
-1. **即時 / 離線資料獲取 (`data_manager.py`)**：
-   - 使用 `requests` 套件介接 CWA API，解析包含北部、中部、南部、東北部、東部及東南部地區的一週氣溫預報。
-   - 支援備用存取機制：允許在離線狀態下讀取本地 `F-A0010-001.json` 檔案。
+1. **全自動化雲端資料獲取 (GitHub Actions + `data_manager.py`)**：
+   - 使用 `requests` 套件介接 CWA API，即時解析台灣各區氣溫預報。
+   - **CI/CD 自動排程**：透過 GitHub Actions 設定 Cron Job，每 12 小時在雲端自動執行爬蟲並更新資料庫，達成 Serverless 自動化 ETL 流程。
+   - **企業級資安架構**：導入 `python-dotenv` 管理 API Token，透過 `.env` 與 GitHub Secrets 機制，徹底避免 Hardcode Secrets 的資安漏洞。
 2. **SQLite3 資料庫整合**：
    - 將讀取、解析過後的最高溫 (MaxT) 與最低溫 (MinT) 等資料，寫入至名為 `data.db` 的資料庫。
    - 資料表 `TemperatureForecasts` 保存所有檢索需要的歷史與即時查詢依據。
@@ -51,12 +52,15 @@
 ```
 d:\aiot_hm2_g\
 │
+├── .github/                 # GitHub Actions 自動化腳本資料夾
+│   └── workflows/
+│       └── update_weather.yml # 負責每 12 小時自動抓取天氣的腳本
 ├── app.py                   # Streamlit 前端 Web App 主程式
 ├── data_manager.py          # 後端爬蟲、JSON解析與 SQLite 資料庫操作模組
 ├── data.db                  # 系統自動建立的 SQLite 資料庫檔案
 ├── weather_data.csv         # 系統自動導出的預測資料備份
 ├── requirements.txt         # 執行此專案所需的 Python 依賴包
-├── F-A0010-001.json         # 氣象局預報的備用離線資料集
+├── .env.example             # 環境變數 (Token) 的安全展示範本
 ├── development_log.md       # 本專案的開發與 debug 過程記錄檔
 └── README.md                # 專案說明文件 (也就是本檔案)
 ```
@@ -99,10 +103,9 @@ streamlit run app.py
 ```
 
 執行後，如果沒有跳出瀏覽器，可以自行打開畫面中顯示的 `Local URL` (通常是 `http://localhost:8501`)。
-網頁左側有 **Data Controls** 選單，你可以切換「Local JSON (Offline)」或是「CWA API (Live)」模式。
 
-> [!IMPORTANT]
-> **資料更新機制**：當切換不同的資料模式 (Local JSON / CWA API) 後，請務必點擊下方的 **Refresh Data** 按鈕。系統才會真正去讀取對應的檔案或連結，並覆蓋原本的資料庫來更新畫面上的氣溫與日期！
+> [!TIP]
+> **資料即時更新**：由於專案已全面導入自動化，網頁會自動讀取最新的 SQLite 資料庫。如果想要手動強制抓取最新預報，點擊左側選單的 **Refresh Data** 按鈕即可。
 
 ### 方法 2: 獨立測試後端資料抓取
 
